@@ -5,20 +5,20 @@ export default async function handler(req, res) {
   }
 
   const { message } = req.body;
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'Missing OPENAI_API_KEY' });
+    return res.status(500).json({ error: 'Missing OPENROUTER_API_KEY' });
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'gpt-4-turbo',
+        model: 'mistralai/mixtral-8x7b',
         messages: [{ role: 'user', content: message }],
         max_tokens: 200
       })
