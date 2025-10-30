@@ -6,6 +6,7 @@ import Finance from './pages/Finance';
 import Politics from './pages/Politics';
 import Tech from './pages/Tech';
 import Sports from './pages/Sports';
+import ChatAssistant from './components/ChatAssistant';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="*" element={<TopNews />} />
           </Routes>
         </div>
+        <ChatAssistant />
       </div>
     </Router>
   );
