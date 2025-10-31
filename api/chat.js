@@ -15,10 +15,12 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`
+        Authorization: `Bearer ${apiKey}`,
+        'HTTP-Referer': 'https://minimal-ai-news-website.vercel.app',
+        'X-Title': 'AI News'
       },
       body: JSON.stringify({
-        model: 'mistralai/mixtral-8x7b',
+        model: 'mistralai/mixtral-8x7b-instruct',
         messages: [{ role: 'user', content: message }],
         max_tokens: 200
       })
@@ -28,6 +30,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ reply });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Failed to fetch AI response' });
+    return res.status(500).json({ error: 'Failed to fetch response from OpenRouter' });
   }
 }
