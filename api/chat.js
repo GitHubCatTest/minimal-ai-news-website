@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         'X-Title': 'AI News'
       },
       body: JSON.stringify({
-        model: 'mistralai/mixtral-8x7b-instruct',
+        model: 'mistralai/mistral-7b-instruct:free',
         messages: [{ role: 'user', content: message }],
         max_tokens: 200
       })
