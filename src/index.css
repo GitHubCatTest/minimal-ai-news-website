@@ -2,10 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional: custom font (Space Grotesk from Google Fonts) */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+}
 
 body {
-  @apply bg-offwhite text-darktext;
-  font-family: 'Space Grotesk', sans-serif;
+  @apply font-inter antialiased bg-[#fdf6f0] text-slate-900 transition-colors duration-500 ease-in-out;
+  background-image: radial-gradient(circle at 10% 10%, rgba(148, 197, 255, 0.22), transparent 60%),
+    radial-gradient(circle at 90% 0%, rgba(190, 222, 255, 0.18), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(255, 236, 209, 0.35), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(249, 250, 251, 0.9));
+  min-height: 100vh;
+}
+
+.dark body {
+  color-scheme: dark;
+}
+
+#root {
+  isolation: isolate;
+}
+
+::selection {
+  @apply bg-accent/40 text-midnight;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
