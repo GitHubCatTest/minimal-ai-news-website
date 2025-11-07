@@ -28,17 +28,10 @@ function App() {
 
   return (
     <Router>
-      <div className="relative min-h-screen overflow-hidden bg-alabaster text-ink transition-colors duration-500 ease-in-out dark:bg-midnight dark:text-slate-100">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-32 left-12 h-80 w-80 rounded-full bg-white/50 blur-[160px] dark:bg-white/10" />
-          <div className="absolute top-40 left-1/3 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-accent/30 blur-[220px] opacity-90 dark:bg-accent/20" />
-          <div className="absolute bottom-0 right-0 h-[32rem] w-[32rem] translate-x-1/4 rounded-full bg-[#ffe7d6]/50 blur-[200px] dark:bg-slate-700/40" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.45),_transparent_55%)]" />
-        </div>
-
+      <div className="relative min-h-screen bg-background text-slate-900 transition-colors duration-300 ease-out dark:bg-slate-950 dark:text-slate-100">
         <Navbar isDarkMode={theme === 'dark'} onToggleTheme={toggleTheme} />
 
-        <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 pb-28 pt-32 sm:px-6 lg:px-8">
+        <main className="relative z-10 mx-auto flex w-full flex-col gap-16 pb-24 pt-28">
           <Routes>
             <Route path="/" element={<News />} />
             <Route path="/market-movers" element={<MarketMovers />} />

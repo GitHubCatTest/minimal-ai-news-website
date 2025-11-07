@@ -1,8 +1,34 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import SectionHeading from '../components/SectionHeading.js';
+import { formatDistanceToNowStrict } from 'date-fns';
 import NewsCard from '../components/NewsCard.js';
-import GlassCard from '../components/GlassCard.js';
 import { getNewsArticles } from '../services/dataClient.js';
+
+const CATEGORY_RULES = [
+  { label: 'Crypto', icon: '💠', keywords: ['bitcoin', 'ethereum', 'crypto', 'token', 'defi', 'solana', 'layer', 'chain'] },
+  { label: 'Semis', icon: '🔧', keywords: ['chip', 'semiconductor', 'nvidia', 'tsmc', 'qualcomm', 'intel'] },
+  { label: 'Fintech', icon: '💳', keywords: ['bank', 'fintech', 'payments', 'stripe', 'paypal', 'square', 'block'] },
+  { label: 'AI', icon: '🤖', keywords: ['ai', 'artificial intelligence', 'model', 'openai', 'gpt', 'anthropic', 'machine learning'] },
+  { label: 'Markets', icon: '📈', keywords: ['stocks', 'market', 'fed', 'treasury', 'yields', 'equity', 'earnings'] },
+];
+
+function assignCategory(article) {
+  const text = `${article.title ?? ''} ${article.summary ?? ''}`.toLowerCase();
+  const match = CATEGORY_RULES.find((rule) => rule.keywords.some((keyword) => text.includes(keyword)));
+  if (match) return `${match.icon} ${match.label}`;
+  return '📰 Market Intel';
+}
+
+function formatMeta(article) {
+  const parts = [article.source];
+  if (article.publishedAt) {
+    try {
+      parts.push(formatDistanceToNowStrict(new Date(article.publishedAt), { addSuffix: true }));
+    } catch (error) {
+      parts.push(article.publishedAt);
+    }
+  }
+  return parts.filter(Boolean).join(' • ');
+}
 
 function News() {
   const [articles, setArticles] = useState([]);
@@ -17,11 +43,16 @@ function News() {
       try {
         const payload = await getNewsArticles();
         if (!cancelled) {
-          setArticles(payload.articles ?? []);
+          const enriched = (payload.articles ?? []).map((article) => ({
+            ...article,
+            category: assignCategory(article),
+            meta: formatMeta(article),
+          }));
+          setArticles(enriched);
         }
       } catch (err) {
         if (!cancelled) {
-          setError('Unable to load news right now. Showing the latest saved briefings.');
+          setError('Unable to load live headlines right now. Showing the latest saved briefings.');
           setArticles([]);
         }
       } finally {
@@ -36,88 +67,70 @@ function News() {
     };
   }, []);
 
-  const [leadStory, supporting] = useMemo(() => {
-    if (!articles || articles.length === 0) return [null, []];
+  const { leadStory, sideBriefs, gridStories } = useMemo(() => {
+    if (!articles.length) {
+      return { leadStory: null, sideBriefs: [], gridStories: [] };
+    }
     const [lead, ...rest] = articles;
-    return [lead, rest];
+    return {
+      leadStory: lead,
+      sideBriefs: rest.slice(0, 3),
+      gridStories: rest.slice(3),
+    };
   }, [articles]);
 
   return (
-    <div className="flex flex-col gap-12">
-      <SectionHeading
-        eyebrow="Daily Brief"
-        title="AI-Powered Finance & Tech Headlines"
-        description="Smart summaries of the essential market-moving stories, refreshed throughout the trading day."
-      />
+    <div className="container flex flex-col gap-10">
+      <header className="space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Daily Brief</p>
+        <h1 className="font-serif text-4xl text-slate-900 dark:text-slate-100">
+          Simply News – AI-Powered Finance &amp; Tech Intelligence
+        </h1>
+        <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
+          Smart, readable summaries on business, markets, and emerging technology. Updated throughout the trading day with an AI editor.
+        </p>
+      </header>
 
       {error && (
-        <div className="rounded-3xl border border-amber-200/60 bg-amber-50/50 p-6 text-sm text-amber-700 backdrop-blur-2xl dark:border-amber-400/30 dark:bg-amber-500/5 dark:text-amber-200">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:border-amber-400/60 dark:bg-amber-500/10 dark:text-amber-200">
           {error}
         </div>
       )}
 
-      <section className="grid gap-8 lg:grid-cols-[2fr_1fr]">
-        <div className="space-y-8">
+      <section className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
           {loading && !leadStory ? (
-            <div className="h-64 animate-pulse rounded-[2rem] bg-white/40 backdrop-blur-xl dark:bg-white/10" />
+            <div className="h-64 animate-pulse rounded-xl bg-white shadow-subtle dark:bg-slate-900" />
           ) : (
-            leadStory && (
-              <GlassCard
-                title={leadStory.title}
-                summary={leadStory.summary}
-                link={leadStory.url}
-                meta={[leadStory.source, leadStory.publishedAt && new Date(leadStory.publishedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })]
-                  .filter(Boolean)
-                  .join(' · ')}
-                accent="TOP STORY"
-                actionLabel="Open coverage"
-              />
+            leadStory && <NewsCard article={leadStory} variant="feature" />
+          )}
+        </div>
+        <aside className="flex flex-col gap-4">
+          {loading && !sideBriefs.length
+            ? Array.from({ length: 3 }).map((_, index) => (
+                <div key={`aside-skeleton-${index}`} className="h-24 animate-pulse rounded-xl bg-white shadow-subtle dark:bg-slate-900" />
+              ))
+            : sideBriefs.map((article) => <NewsCard key={article.id ?? article.title} article={article} variant="condensed" />)}
+        </aside>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="font-serif text-2xl text-slate-900 dark:text-slate-100">More stories</h2>
+          <span className="text-xs uppercase tracking-[0.3em] text-slate-500">AI-curated mix</span>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {(loading && !gridStories.length
+            ? Array.from({ length: 8 })
+            : gridStories
+          ).map((item, index) =>
+            loading && !gridStories.length ? (
+              <div key={`grid-skeleton-${index}`} className="h-56 animate-pulse rounded-xl bg-white shadow-subtle dark:bg-slate-900" />
+            ) : (
+              <NewsCard key={item.id ?? item.title} article={item} variant="standard" />
             )
           )}
-          <div className="grid gap-6 sm:grid-cols-2">
-            {(loading ? Array.from({ length: 4 }) : supporting.slice(0, 4)).map((item, index) =>
-              loading ? (
-                <div key={`skeleton-${index}`} className="h-48 animate-pulse rounded-3xl bg-white/40 backdrop-blur-xl dark:bg-white/10" />
-              ) : (
-                <NewsCard key={item.id ?? item.title} article={item} />
-              )
-            )}
-          </div>
         </div>
-        <aside className="flex flex-col gap-6">
-          <div className="rounded-[1.9rem] border border-white/20 bg-white/25 p-6 shadow-frosted backdrop-blur-2xl dark:border-white/10 dark:bg-white/10">
-            <h2 className="text-sm uppercase tracking-[0.4em] text-slate-500 dark:text-slate-300">Smart Filters</h2>
-            <p className="mt-3 text-lg font-semibold text-ink dark:text-white">What the model is tracking</p>
-            <ul className="mt-4 space-y-3 text-sm text-slate-600 dark:text-slate-300">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-accent/60" aria-hidden="true" />
-                <span>Enterprise AI deals, GPU supply signals, and infra capacity updates.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-accent/40" aria-hidden="true" />
-                <span>Crypto liquidity regimes, on-chain flows, and regulatory catalysts.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2 w-2 rounded-full bg-accent/20" aria-hidden="true" />
-                <span>Fintech product launches and M&amp;A sentiment from earnings calls.</span>
-              </li>
-            </ul>
-          </div>
-          <div className="rounded-[1.9rem] border border-white/20 bg-white/25 p-6 shadow-frosted backdrop-blur-2xl dark:border-white/10 dark:bg-white/10">
-            <h3 className="text-sm uppercase tracking-[0.4em] text-slate-500 dark:text-slate-300">Live Refresh</h3>
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
-              News API lookups run every few minutes. Connect your own key for fully live updates and GPT-powered summaries.
-            </p>
-            <a
-              href="https://newsapi.org/"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-ink shadow-inner transition-all duration-300 ease-in-out hover:border-white/50 hover:bg-white dark:border-white/10 dark:bg-white/10 dark:text-slate-200"
-            >
-              Configure API
-            </a>
-          </div>
-        </aside>
       </section>
     </div>
   );

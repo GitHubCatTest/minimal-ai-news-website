@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SectionHeading from '../components/SectionHeading.js';
 import TrendCard from '../components/TrendCard.js';
-import GlassCard from '../components/GlassCard.js';
 import { getTrends, getNewsArticles } from '../services/dataClient.js';
 
 function Trends() {
@@ -38,48 +36,60 @@ function Trends() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-12">
-      <SectionHeading
-        eyebrow="Signal Scanner"
-        title="AI-detected themes breaking through the noise"
-        description="Headline frequency analysis and GPT reasoning highlight which stories are accelerating today."
-      />
+    <div className="container flex flex-col gap-10">
+      <header className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Signal Scanner</p>
+        <h1 className="font-serif text-3xl text-slate-900 dark:text-slate-100">AI-detected themes breaking through the noise</h1>
+        <p className="max-w-3xl text-sm text-slate-600 dark:text-slate-300">
+          Headline frequency analysis and entity clustering surface today&apos;s dominant conversations. Connect LLM keys to enhance reasoning with narrative context.
+        </p>
+      </header>
 
       {error && (
-        <div className="rounded-3xl border border-amber-200/60 bg-amber-50/50 p-6 text-sm text-amber-700 backdrop-blur-2xl dark:border-amber-400/30 dark:bg-amber-500/5 dark:text-amber-200">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:border-amber-400/60 dark:bg-amber-500/10 dark:text-amber-200">
           {error}
         </div>
       )}
 
-      <section className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+      <section className="grid gap-8 lg:grid-cols-[2fr_1fr]">
         <div className="grid gap-5 sm:grid-cols-2">
-          {(loading ? Array.from({ length: 4 }) : trends).map((trend, index) =>
+          {(loading ? Array.from({ length: 6 }) : trends).map((trend, index) =>
             loading ? (
-              <div key={`skeleton-${index}`} className="h-48 animate-pulse rounded-3xl bg-white/40 backdrop-blur-xl dark:bg-white/10" />
+              <div key={`trend-skeleton-${index}`} className="h-48 animate-pulse rounded-xl bg-white shadow-subtle dark:bg-slate-900" />
             ) : (
-              <TrendCard key={trend.keyword} trend={trend} />
+              <TrendCard key={trend.term} trend={trend} />
             )
           )}
         </div>
-        <aside className="flex flex-col gap-6">
-          <div className="rounded-[1.9rem] border border-white/20 bg-white/25 p-6 shadow-frosted backdrop-blur-2xl dark:border-white/10 dark:bg-white/10">
-            <h2 className="text-sm uppercase tracking-[0.4em] text-slate-500 dark:text-slate-300">How it works</h2>
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
-              We scan each fetched headline, remove noise words, and track velocity changes. Provide an OpenAI or OpenRouter key to unlock narrative explanations and sentiment scoring in-line.
+
+        <aside className="flex flex-col gap-4">
+          <div className="rounded-xl border border-black/5 bg-surface p-5 shadow-subtle dark:border-white/10 dark:bg-slate-950">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">How it works</h2>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              We cluster entities, tickers, and AI keywords across the latest headlines, then compare today&apos;s velocity with the prior window to gauge momentum shifts.
             </p>
           </div>
-          <div className="space-y-4">
-            {stories.slice(0, 3).map((article) => (
-              <GlassCard
-                key={article.id}
-                title={article.title}
-                summary={article.summary}
-                link={article.url}
-                meta={article.source}
-                accent="Context"
-                actionLabel="View story"
-              />
-            ))}
+          <div className="rounded-xl border border-black/5 bg-surface p-5 shadow-subtle dark:border-white/10 dark:bg-slate-950">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Context stories</h2>
+            <ul className="mt-3 space-y-3 text-sm text-slate-600 dark:text-slate-300">
+              {(loading ? Array.from({ length: 3 }) : stories.slice(0, 3)).map((story, index) =>
+                loading ? (
+                  <li key={`story-skeleton-${index}`} className="h-14 animate-pulse rounded bg-slate-100 dark:bg-slate-900" />
+                ) : (
+                  <li key={story.id ?? `${story.title}-${index}`} className="space-y-1">
+                    <a
+                      href={story.url}
+                      className="font-medium text-slate-900 hover:text-accent-blue dark:text-slate-100"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {story.title}
+                    </a>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{story.summary}</p>
+                  </li>
+                )
+              )}
+            </ul>
           </div>
         </aside>
       </section>

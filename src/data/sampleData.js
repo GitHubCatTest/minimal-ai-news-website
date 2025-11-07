@@ -164,34 +164,74 @@ export const sampleMarketMovers = {
 
 export const sampleTrends = [
   {
-    keyword: 'Solana DeFi',
-    change: 42,
-    sentiment: 'bullish',
-    description: 'Layer-1 DeFi total value locked jumped on Solana ecosystem liquidity incentives and stablecoin inflows.',
+    term: 'SOLANA',
+    momentum: 48.2,
+    direction: 'up',
+    frequency: 7,
+    headlines: [
+      'Solana DeFi incentives extend rally as TVL jumps 15% week-over-week',
+      'Layer-2 capital rotation continues with SOL and ecosystem tokens leading gains',
+    ],
+    insight: [
+      '4 mentions in the latest cycle versus 1 previously.',
+      'Key coverage: Solana DeFi incentives extend rally as TVL jumps 15% week-over-week',
+    ],
   },
   {
-    keyword: 'AI Infrastructure',
-    change: 37,
-    sentiment: 'bullish',
-    description: 'Chipmakers and data center REITs highlighted new multi-year AI accelerator purchase commitments.',
+    term: 'AI INFRASTRUCTURE',
+    momentum: 35.6,
+    direction: 'up',
+    frequency: 6,
+    headlines: [
+      'Chipmakers lift capex guidance on accelerating AI server demand',
+      'Hyperscalers lock in next-gen accelerators ahead of supply constraints',
+    ],
+    insight: [
+      '3 mentions in the latest cycle versus 1 previously.',
+      'Key coverage: Chipmakers lift capex guidance on accelerating AI server demand',
+    ],
   },
   {
-    keyword: 'Rate Cuts',
-    change: 18,
-    sentiment: 'neutral',
-    description: 'Bond markets priced in two cuts after dovish central bank remarks, supporting growth-tech valuations.',
+    term: 'RATE CUTS',
+    momentum: 14.0,
+    direction: 'flat',
+    frequency: 5,
+    headlines: [
+      'Bond markets price in two cuts after dovish central bank remarks',
+      'Tech valuations extend gains as yields cool on macro outlook',
+    ],
+    insight: [
+      '2 mentions in the latest cycle versus 1 previously.',
+      'Key coverage: Bond markets price in two cuts after dovish central bank remarks',
+    ],
   },
   {
-    keyword: 'Bitcoin ETFs',
-    change: 31,
-    sentiment: 'bullish',
-    description: 'Spot Bitcoin ETF inflows hit a new weekly high as advisors increase allocations to digital assets.',
+    term: 'BITCOIN ETF',
+    momentum: 27.3,
+    direction: 'up',
+    frequency: 6,
+    headlines: [
+      'Spot bitcoin ETF inflows hit a weekly record as advisors rotate exposure',
+      'Institutional demand for BTC-linked funds offsets miner selling pressure',
+    ],
+    insight: [
+      '3 mentions in the latest cycle versus 1 previously.',
+      'Key coverage: Spot bitcoin ETF inflows hit a weekly record as advisors rotate exposure',
+    ],
   },
   {
-    keyword: 'AI Regulation',
-    change: 22,
-    sentiment: 'watch',
-    description: 'US and EU regulators previewed new guardrails for AI safety testing and algorithmic disclosures.',
+    term: 'AI SAFETY',
+    momentum: 18.1,
+    direction: 'up',
+    frequency: 4,
+    headlines: [
+      'US and EU regulators preview new guardrails for AI safety testing',
+      'Model providers outline disclosure frameworks ahead of compliance deadlines',
+    ],
+    insight: [
+      '2 mentions in the latest cycle versus 1 previously.',
+      'Key coverage: US and EU regulators preview new guardrails for AI safety testing',
+    ],
   },
 ];
 

@@ -1,29 +1,47 @@
 import React from 'react';
+import clsx from 'clsx';
 
 function TrendCard({ trend }) {
-  const sentimentColor = {
-    bullish: 'text-emerald-500',
-    neutral: 'text-slate-500',
-    watch: 'text-amber-500',
-    bearish: 'text-rose-500',
-  }[trend.sentiment ?? 'neutral'];
-
-  const formattedChange = trend.change > 0 ? `+${trend.change}` : trend.change;
+  const { term, momentum, direction, frequency, headlines = [], insight = [] } = trend;
+  const arrow = direction === 'up' ? '↑' : direction === 'down' ? '↓' : '→';
+  const momentumLabel = `${arrow} ${momentum > 0 ? '+' : ''}${momentum.toFixed(1)}%`;
 
   return (
-    <div className="group flex flex-col gap-3 rounded-3xl border border-white/20 bg-white/25 p-5 shadow-frosted backdrop-blur-2xl transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:border-white/40 hover:shadow-glow dark:border-white/10 dark:bg-white/10">
-      <div className="flex items-center justify-between text-xs uppercase tracking-[0.38em] text-slate-500/80 dark:text-slate-300/80">
-        <span className="rounded-full border border-white/40 bg-white/60 px-3 py-1 text-[10px] font-semibold tracking-[0.5em] text-slate-600 dark:border-white/10 dark:bg-white/10 dark:text-slate-200">
-          TREND
-        </span>
-        <span className={`${sentimentColor} font-medium`}>{trend.sentiment?.toUpperCase() ?? 'NEUTRAL'}</span>
+    <article className="flex h-full flex-col justify-between rounded-xl border border-black/5 bg-surface p-5 shadow-subtle transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-card dark:border-white/10 dark:bg-slate-950">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-xs uppercase tracking-wide text-slate-500">
+          <span className="font-semibold">Today&apos;s trend</span>
+          <span
+            className={clsx('font-semibold', {
+              'text-emerald-600 dark:text-emerald-400': direction === 'up',
+              'text-rose-600 dark:text-rose-400': direction === 'down',
+              'text-slate-500 dark:text-slate-300': direction === 'flat',
+            })}
+          >
+            {momentumLabel}
+          </span>
+        </div>
+        <h3 className="font-serif text-2xl text-slate-900 dark:text-slate-100">{term}</h3>
+        <p className="text-sm text-slate-600 dark:text-slate-300">Mentioned in {frequency} tracked stories today.</p>
+        <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+          {headlines.slice(0, 2).map((headline) => (
+            <li key={headline} className="line-clamp-2">
+              • {headline}
+            </li>
+          ))}
+        </ul>
       </div>
-      <h3 className="text-lg font-semibold text-ink dark:text-white">{trend.keyword}</h3>
-      <p className="text-sm text-slate-500 dark:text-slate-300">{trend.description}</p>
-      <p className="text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
-        Momentum {formattedChange}%
-      </p>
-    </div>
+      <div className="mt-4 border-t border-black/5 pt-3 text-xs text-slate-500 dark:border-white/10 dark:text-slate-400">
+        <p className="font-semibold uppercase tracking-wide text-slate-500">Why it matters</p>
+        <ul className="mt-2 space-y-1">
+          {insight.slice(0, 2).map((bullet, index) => (
+            <li key={`${term}-insight-${index}`} className="leading-snug">
+              {bullet}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
   );
 }
 

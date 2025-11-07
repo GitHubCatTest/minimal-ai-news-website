@@ -1,33 +1,35 @@
+const theme = require('./src/theme.js');
+
 module.exports = {
   darkMode: 'class',
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: theme.spacing[5],
+        sm: theme.spacing[6],
+        lg: theme.spacing[8],
+        xl: theme.spacing[10],
+      },
+      screens: {
+        '2xl': theme.layout.maxWidth,
+      },
+    },
     extend: {
       fontFamily: {
-        inter: ['"Inter"', '"Space Grotesk"', '"Rubik"', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+        serif: ['Newsreader', 'Georgia', 'serif'],
       },
-      colors: {
-        accent: "#8fb7ff",
-        midnight: "#0f172a",
-        alabaster: "#fdf6f0",
-        ink: "#1b1f2b",
-      },
-      boxShadow: {
-        glow: '0 0 35px rgba(125, 211, 252, 0.45)',
-        frosted: '0 20px 60px -30px rgba(15, 23, 42, 0.65)',
-      },
-      backdropBlur: {
-        xs: '2px',
-      },
-      borderRadius: {
-        '4xl': '2.5rem',
-      },
+      fontSize: theme.typography.scale,
+      colors: theme.colors,
+      boxShadow: theme.shadows,
+      borderRadius: theme.radii,
+      spacing: theme.spacing,
       transitionTimingFunction: {
-        'in-out-soft': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'out-soft': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };

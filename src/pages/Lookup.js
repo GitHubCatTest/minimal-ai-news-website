@@ -35,7 +35,7 @@ function Lookup() {
   };
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="container flex flex-col gap-8">
       <SectionHeading
         eyebrow="Symbol Lookup"
         title="Instant intelligence on any ticker or token"
@@ -44,9 +44,9 @@ function Lookup() {
           <button
             type="button"
             onClick={() => handleLookup(query || 'BTC')}
-            className="rounded-full border border-white/40 bg-white/70 px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-ink shadow-inner transition-all duration-300 ease-in-out hover:border-white/60 hover:bg-white dark:border-white/10 dark:bg-white/10 dark:text-slate-200"
+            className="rounded-full border border-black/5 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-600 shadow-subtle transition-colors duration-200 hover:text-accent-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/40 dark:border-white/10 dark:bg-slate-950 dark:text-slate-200"
           >
-            Auto
+            Try BTC
           </button>
         }
       />
@@ -56,20 +56,20 @@ function Lookup() {
           event.preventDefault();
           handleLookup(query);
         }}
-        className="flex flex-col gap-4 rounded-[2rem] border border-white/30 bg-white/40 p-6 shadow-frosted backdrop-blur-2xl sm:flex-row sm:items-center dark:border-white/10 dark:bg-white/10"
+        className="flex flex-col gap-4 rounded-xl border border-black/5 bg-surface p-5 shadow-subtle sm:flex-row sm:items-center dark:border-white/10 dark:bg-slate-950"
       >
-        <label className="flex grow items-center gap-3 rounded-full border border-white/40 bg-white/70 px-5 py-3 text-sm text-slate-600 backdrop-blur-2xl focus-within:border-accent/70 focus-within:shadow-glow dark:border-white/10 dark:bg-white/5 dark:text-slate-200">
-          <span className="text-xs uppercase tracking-[0.4em] text-slate-400">Symbol</span>
+        <label className="flex grow items-center gap-4">
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Symbol</span>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value.toUpperCase())}
             placeholder="e.g. NVDA, BTC, ETH"
-            className="w-full bg-transparent text-lg font-semibold uppercase tracking-[0.35em] text-ink placeholder:text-slate-400 focus:outline-none dark:text-white"
+            className="w-full rounded-lg border border-black/5 bg-white px-4 py-2 text-base font-semibold uppercase tracking-[0.25em] text-slate-900 placeholder:text-slate-400 focus:border-accent-blue focus:outline-none focus:ring-1 focus:ring-accent-blue/40 dark:border-white/10 dark:bg-slate-900 dark:text-slate-100"
           />
         </label>
         <button
           type="submit"
-          className="rounded-full border border-white/40 bg-accent/80 px-6 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-midnight shadow-inner transition-all duration-300 ease-in-out hover:scale-105 hover:border-white/60 hover:bg-accent dark:border-white/20 dark:bg-accent/70 dark:text-white"
+          className="inline-flex items-center justify-center rounded-full border border-black/5 bg-accent-blue px-6 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-subtle transition-transform duration-200 ease-out hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/60 dark:border-transparent"
         >
           Lookup
         </button>

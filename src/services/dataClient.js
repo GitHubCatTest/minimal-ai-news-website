@@ -214,31 +214,130 @@ export async function getMarketMovers() {
 export async function getTrends() {
   try {
     const news = await getNewsArticles();
-    const keywords = new Map();
-    const stopwords = new Set(['the', 'and', 'for', 'with', 'into', 'amid', 'from', 'this', 'that', 'into', 'over']);
+    const articles = news.articles ?? [];
+    if (!articles.length) {
+      return sampleTrends;
+    }
 
-    news.articles.forEach((article) => {
-      const text = `${article.title} ${article.summary}`.toLowerCase();
-      text
-        .replace(/[^a-z0-9\s]/g, ' ')
-        .split(/\s+/)
-        .filter((word) => word.length > 2 && !stopwords.has(word))
-        .forEach((word) => {
-          keywords.set(word, (keywords.get(word) || 0) + 1);
-        });
+    const stopwords = new Set(
+      [
+        'the',
+        'and',
+        'for',
+        'with',
+        'into',
+        'amid',
+        'from',
+        'this',
+        'that',
+        'over',
+        'after',
+        'under',
+        'about',
+        'across',
+        'today',
+        'update',
+        'breaking',
+        'reports',
+        'launches',
+      ].map((word) => word.toLowerCase())
+    );
+
+    const sorted = [...articles].sort((a, b) => {
+      const aTime = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+      const bTime = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+      return bTime - aTime;
     });
 
-    const ranked = Array.from(keywords.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([keyword, frequency]) => ({
-        keyword,
-        change: Math.round((frequency / news.articles.length) * 100),
-        sentiment: 'neutral',
-        description: `Keyword surfaced in ${frequency} tracked stories today.`,
-      }));
+    const midpoint = Math.max(1, Math.floor(sorted.length / 2));
+    const recentWindow = sorted.slice(0, midpoint);
+    const previousWindow = sorted.slice(midpoint);
 
-    if (ranked.length === 0) {
+    const trends = new Map();
+
+    const registerTerm = (term, bucket, article) => {
+      const key = term.toUpperCase();
+      if (!trends.has(key)) {
+        trends.set(key, {
+          term: key,
+          recent: 0,
+          previous: 0,
+          total: 0,
+          headlines: [],
+        });
+      }
+      const entry = trends.get(key);
+      entry.total += 1;
+      if (bucket === 'recent') {
+        entry.recent += 1;
+      } else {
+        entry.previous += 1;
+      }
+      if (entry.headlines.length < 4 && article?.title) {
+        entry.headlines.push(article.title);
+      }
+    };
+
+    const extractTerms = (article, bucket) => {
+      const text = `${article.title ?? ''} ${article.summary ?? ''}`;
+      const tokens = new Set();
+
+      const tickerMatches = text.match(/\b[A-Z]{2,5}\b/g) ?? [];
+      tickerMatches.forEach((token) => {
+        const normalized = token.replace(/[^A-Z]/g, '');
+        if (normalized.length >= 2 && normalized.length <= 5) {
+          tokens.add(normalized);
+        }
+      });
+
+      const capitalized = text.match(/\b([A-Z][a-zA-Z0-9&-]*(?:\s+[A-Z][a-zA-Z0-9&-]*){0,2})\b/g) ?? [];
+      capitalized.forEach((phrase) => {
+        const normalized = phrase.trim();
+        const lower = normalized.toLowerCase();
+        if (lower.length <= 2 || stopwords.has(lower)) return;
+        if (/^[A-Z]{2,}$/.test(normalized)) return;
+        tokens.add(normalized);
+      });
+
+      ['artificial intelligence', 'machine learning', 'gen ai', 'large language model', 'rate cuts', 'spot etf', 'semiconductor']
+        .filter((keyword) => text.toLowerCase().includes(keyword))
+        .forEach((keyword) => tokens.add(keyword.toUpperCase()));
+
+      tokens.forEach((term) => registerTerm(term, bucket, article));
+    };
+
+    recentWindow.forEach((article) => extractTerms(article, 'recent'));
+    previousWindow.forEach((article) => extractTerms(article, 'previous'));
+
+    const ranked = Array.from(trends.values())
+      .filter((entry) => entry.recent > 0)
+      .map((entry) => {
+        const momentumRaw = entry.previous
+          ? ((entry.recent - entry.previous) / Math.max(entry.previous, 1)) * 100
+          : entry.recent * 100;
+        const direction = momentumRaw > 15 ? 'up' : momentumRaw < -15 ? 'down' : 'flat';
+        const insight = [
+          `${entry.recent} mentions in the latest cycle versus ${entry.previous || 0} previously.`,
+        ];
+        if (entry.headlines[0]) {
+          insight.push(`Key coverage: ${entry.headlines[0]}`);
+        }
+        return {
+          term: entry.term,
+          momentum: Number(momentumRaw.toFixed(1)),
+          direction,
+          frequency: entry.total,
+          headlines: entry.headlines,
+          insight,
+        };
+      })
+      .sort((a, b) => {
+        if (b.momentum !== a.momentum) return b.momentum - a.momentum;
+        return b.frequency - a.frequency;
+      })
+      .slice(0, 6);
+
+    if (!ranked.length) {
       return sampleTrends;
     }
 
