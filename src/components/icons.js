@@ -53,6 +53,17 @@ export const NewspaperIcon = (props) => (
   </IconBase>
 );
 
+export const ChartTrendIcon = (props) => (
+  <IconBase {...props}>
+    <path d="M3 3v18h18" />
+    <path d="m7 14 4-4 3 3 5-6" />
+    <circle cx="7" cy="14" r="1" />
+    <circle cx="11" cy="10" r="1" />
+    <circle cx="14" cy="13" r="1" />
+    <circle cx="19" cy="7" r="1" />
+  </IconBase>
+);
+
 export const BanknotesIcon = (props) => (
   <IconBase {...props}>
     <rect x="3" y="6" width="18" height="12" rx="2" />
@@ -73,6 +84,18 @@ export const BuildingLibraryIcon = (props) => (
     <path d="M18 10v8" />
     <path d="M3 18h18" />
     <path d="M2 10 12 4l10 6" />
+  </IconBase>
+);
+
+export const RadarIcon = (props) => (
+  <IconBase {...props}>
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="5" />
+    <path d="M12 7v5l3 3" />
+    <line x1="12" y1="3" x2="12" y2="5" />
+    <line x1="21" y1="12" x2="19" y2="12" />
+    <line x1="12" y1="21" x2="12" y2="19" />
+    <line x1="3" y1="12" x2="5" y2="12" />
   </IconBase>
 );
 
@@ -98,6 +121,24 @@ export const TrophyIcon = (props) => (
     <path d="M12 14v4" />
     <path d="M9 21h6" />
     <path d="M9 11h6" />
+  </IconBase>
+);
+
+export const CompassIcon = (props) => (
+  <IconBase {...props}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="m8 16 2.5-6.5L17 8l-2.5 6.5Z" />
+    <circle cx="12" cy="12" r="1" />
+  </IconBase>
+);
+
+export const NotebookIcon = (props) => (
+  <IconBase {...props}>
+    <path d="M5 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5" />
+    <path d="M5 4v16" />
+    <path d="M9 8h5" />
+    <path d="M9 12h5" />
+    <path d="M9 16h4" />
   </IconBase>
 );
 

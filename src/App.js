@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.js';
-import TopNews from './pages/TopNews.js';
-import Finance from './pages/Finance.js';
-import Politics from './pages/Politics.js';
-import Tech from './pages/Tech.js';
-import Sports from './pages/Sports.js';
+import News from './pages/News.js';
+import MarketMovers from './pages/MarketMovers.js';
+import Trends from './pages/Trends.js';
+import Lookup from './pages/Lookup.js';
+import Digest from './pages/Digest.js';
 import ChatAssistant from './components/ChatAssistant.js';
 import Footer from './components/Footer.js';
 
@@ -40,12 +40,12 @@ function App() {
 
         <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 pb-28 pt-32 sm:px-6 lg:px-8">
           <Routes>
-            <Route path="/" element={<TopNews />} />
-            <Route path="/finance" element={<Finance />} />
-            <Route path="/politics" element={<Politics />} />
-            <Route path="/tech" element={<Tech />} />
-            <Route path="/sports" element={<Sports />} />
-            <Route path="*" element={<TopNews />} />
+            <Route path="/" element={<News />} />
+            <Route path="/market-movers" element={<MarketMovers />} />
+            <Route path="/trends" element={<Trends />} />
+            <Route path="/lookup" element={<Lookup />} />
+            <Route path="/digest" element={<Digest />} />
+            <Route path="*" element={<News />} />
           </Routes>
         </main>
 

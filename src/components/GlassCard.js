@@ -34,9 +34,11 @@ function GlassCard({ title, summary, link, meta, accent, actionLabel = 'Read mor
               <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
             </a>
           ) : (
-            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-slate-500/70 dark:text-slate-400/70">
-              Stay informed
-            </span>
+            actionLabel !== '' && (
+              <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.35em] text-slate-500/70 dark:text-slate-400/70">
+                Stay informed
+              </span>
+            )
           )}
           <span className="pointer-events-none rounded-full bg-white/70 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.4em] text-slate-500 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100 dark:bg-white/10 dark:text-slate-300">
             Explore

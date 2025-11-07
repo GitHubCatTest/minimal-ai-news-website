@@ -1,25 +1,25 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
-  BanknotesIcon,
-  BuildingLibraryIcon,
-  CpuChipIcon,
+  ChartTrendIcon,
+  CompassIcon,
   MagnifierIcon,
   MoonIcon,
   NewspaperIcon,
+  NotebookIcon,
+  RadarIcon,
   SunIcon,
-  TrophyIcon,
 } from './icons.js';
 
 function Navbar({ isDarkMode, onToggleTheme }) {
   const { pathname } = useLocation();
 
   const navItems = [
-    { name: 'Top News', path: '/', icon: NewspaperIcon },
-    { name: 'Finance', path: '/finance', icon: BanknotesIcon },
-    { name: 'Politics', path: '/politics', icon: BuildingLibraryIcon },
-    { name: 'Tech', path: '/tech', icon: CpuChipIcon },
-    { name: 'Sports', path: '/sports', icon: TrophyIcon },
+    { name: 'News', path: '/', icon: NewspaperIcon },
+    { name: 'Market Movers', path: '/market-movers', icon: ChartTrendIcon },
+    { name: 'Trends', path: '/trends', icon: RadarIcon },
+    { name: 'Lookup', path: '/lookup', icon: CompassIcon },
+    { name: 'Digest', path: '/digest', icon: NotebookIcon },
   ];
 
   return (
@@ -36,7 +36,12 @@ function Navbar({ isDarkMode, onToggleTheme }) {
                 className="h-9 w-9 rounded-2xl bg-gradient-to-br from-accent/70 via-white/40 to-transparent"
               />
             </span>
-            <span className="text-2xl font-semibold tracking-tight">Simply News</span>
+            <div>
+              <p className="text-xl font-semibold tracking-tight">Simply News</p>
+              <p className="text-[11px] uppercase tracking-[0.42em] text-slate-500 dark:text-slate-300">
+                AI Finance &amp; Tech Intelligence
+              </p>
+            </div>
           </Link>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end sm:gap-6">

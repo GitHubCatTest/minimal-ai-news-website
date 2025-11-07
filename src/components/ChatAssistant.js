@@ -35,7 +35,7 @@ function ChatAssistant({ isDarkMode }) {
   return (
     <div data-theme={themeState} className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
       {isOpen && (
-        <div className="w-80 max-w-[90vw] rounded-3xl border border-white/25 bg-white/70 shadow-frosted backdrop-blur-2xl transition-all duration-300 ease-in-out dark:border-white/10 dark:bg-white/10">
+        <div className="w-72 max-w-[85vw] rounded-3xl border border-white/25 bg-white/70 shadow-frosted backdrop-blur-2xl transition-all duration-300 ease-in-out dark:border-white/10 dark:bg-white/10">
           <div className="flex items-center justify-between border-b border-white/40 px-4 pb-3 pt-4 text-[11px] font-medium uppercase tracking-[0.4em] text-slate-600/80 dark:border-white/10 dark:text-slate-300/80">
             <span>News Assistant</span>
             <button
@@ -99,12 +99,11 @@ function ChatAssistant({ isDarkMode }) {
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label="Toggle news assistant"
         aria-expanded={isOpen}
-        className="group inline-flex items-center gap-3 rounded-full border border-white/40 bg-white/70 px-4 py-3 text-sm font-medium text-ink shadow-frosted backdrop-blur-2xl transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-glow dark:border-white/10 dark:bg-white/10 dark:text-white"
+        className="group inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-white/70 text-ink shadow-frosted backdrop-blur-2xl transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 dark:border-white/10 dark:bg-white/10 dark:text-white"
       >
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent/50 via-white/50 to-transparent text-ink shadow-inner transition-transform duration-300 ease-in-out group-hover:scale-105 dark:text-white">
           <SparkleIcon className="h-5 w-5" />
         </span>
-        <span className="hidden sm:block">Ask Simply</span>
       </button>
     </div>
   );

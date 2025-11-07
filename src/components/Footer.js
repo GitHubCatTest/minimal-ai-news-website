@@ -11,7 +11,7 @@ function Footer() {
     <footer className="relative z-10 mt-20 border-t border-white/40 bg-white/40 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8 dark:text-slate-300">
         <p className="text-sm tracking-wide text-slate-500 dark:text-slate-400">
-          © {new Date().getFullYear()} Simply News. Crafted for clarity.
+          © {new Date().getFullYear()} Simply News – AI-Powered Finance &amp; Tech Intelligence.
         </p>
         <nav className="flex gap-6">
           {footerLinks.map((link) => (
